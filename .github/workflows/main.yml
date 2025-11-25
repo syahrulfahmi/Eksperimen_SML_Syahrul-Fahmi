@@ -1,0 +1,47 @@
+name: Preprocess Dataset
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+      
+permissions:
+  contents: write
+
+jobs:
+  preprocess:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out repository
+      - uses: actions/checkout@v3
+
+      # Setup Python 3.12.7
+      - name: Set up Python 3.12.7
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12.7"
+
+      # install dependencies
+      - name: Install dependencies
+        run: |
+          pip install pandas scikit-learn joblib nltk requests sastrawi git+https://github.com/ariaghora/mpstemmer.git python-Levenshtein
+          python -m nltk.downloader punkt
+          python -m nltk.downloader stopwords
+
+      # run automation pre processing
+      - name: Run automation preprocessing
+        run: |
+          python preprocessing/automate_syahrul-fahmi.py
+
+      # push dataset to repository
+      - name: commit pre-processed dataset
+        run: |
+          git config --global user.name ${{ secrets.USERNAME }}
+          git config --global user.email ${{ secrets.EMAIL }}
+          git add preprocessing/ulasan_processed_dataset.csv
+          git commit -m "update preprocessed dataset"
+          git push
