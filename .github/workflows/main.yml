@@ -25,19 +25,28 @@ jobs:
         with:
           python-version: "3.12.7"
 
-      # install dependencies
+      # Install Dependencies
       - name: Install dependencies
         run: |
           pip install pandas scikit-learn joblib nltk requests sastrawi git+https://github.com/ariaghora/mpstemmer.git python-Levenshtein
           python -m nltk.downloader punkt
           python -m nltk.downloader stopwords
 
-      # run automation pre processing
+      # Run Automation Preprocessing
       - name: Run automation preprocessing
         run: |
           python preprocessing/automate_syahrul-fahmi.py
 
-      # push dataset to repository
+      # Setup Github LFS
+      - name: Set up Git LFS
+        run: |
+           git lfs install
+           git lfs track "mlruns/**"
+           git add .gitattributes
+           git commit -m "Track large files in mlruns with Git LFS" || true
+           git push
+
+      # Push Processed Dataset
       - name: commit pre-processed dataset
         run: |
           git config --global user.name ${{ secrets.USERNAME }}
