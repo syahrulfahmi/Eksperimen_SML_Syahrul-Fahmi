@@ -209,8 +209,7 @@ def preprocess_text_data(
     }
     dump(pipeline, save_pipeline_path)
 
-    df_cleaned = df.drop(columns=['label'])
-    df_cleaned.to_csv(save_clean_csv_path, index=False)
+    df.to_csv(save_clean_csv_path, index=False)
 
     return x_train, x_test, y_train, y_test, df
 
