@@ -40,6 +40,8 @@ jobs:
       # Setup Github LFS
       - name: Set up Git LFS
         run: |
+           git config --global user.name ${{ secrets.USERNAME }}
+           git config --global user.email ${{ secrets.EMAIL }}
            git lfs install
            git lfs track "mlruns/**"
            git add .gitattributes
@@ -49,8 +51,6 @@ jobs:
       # Push Processed Dataset
       - name: commit pre-processed dataset
         run: |
-          git config --global user.name ${{ secrets.USERNAME }}
-          git config --global user.email ${{ secrets.EMAIL }}
           git add preprocessing/ulasan_processed_dataset.csv
           git commit -m "update preprocessed dataset"
           git push
