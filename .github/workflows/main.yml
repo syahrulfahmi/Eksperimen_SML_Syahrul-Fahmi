@@ -43,7 +43,7 @@ jobs:
            git config --global user.name ${{ secrets.USERNAME }}
            git config --global user.email ${{ secrets.EMAIL }}
            git lfs install
-           git lfs track "mlruns/**"
+           git lfs track "preprocessing/**"
            git add .gitattributes
            git commit -m "Track large files in mlruns with Git LFS" || true
            git push
